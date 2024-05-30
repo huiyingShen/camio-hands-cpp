@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F05B7F7E1B5FEA190FCD377 /* Pods_CamIo_Hands_Cpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00E61A65DCCE819D4B36222 /* Pods_CamIo_Hands_Cpp.framework */; };
 		91B183EC2BF2AD1D00DFF036 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B183EB2BF2AD1D00DFF036 /* AppDelegate.swift */; };
 		91B183EE2BF2AD1D00DFF036 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B183ED2BF2AD1D00DFF036 /* SceneDelegate.swift */; };
 		91B183F02BF2AD1D00DFF036 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B183EF2BF2AD1D00DFF036 /* ViewController.swift */; };
@@ -16,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		12B409520F1D4586B8A1D4E7 /* Pods-CamIo Hands Cpp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CamIo Hands Cpp.release.xcconfig"; path = "Target Support Files/Pods-CamIo Hands Cpp/Pods-CamIo Hands Cpp.release.xcconfig"; sourceTree = "<group>"; };
+		637B2B49D9E2B2415AD1242B /* Pods-CamIo Hands Cpp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CamIo Hands Cpp.debug.xcconfig"; path = "Target Support Files/Pods-CamIo Hands Cpp/Pods-CamIo Hands Cpp.debug.xcconfig"; sourceTree = "<group>"; };
 		91B183E82BF2AD1D00DFF036 /* CamIo Hands Cpp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CamIo Hands Cpp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B183EB2BF2AD1D00DFF036 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91B183ED2BF2AD1D00DFF036 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +27,7 @@
 		91B183F42BF2AD1E00DFF036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91B183F72BF2AD1E00DFF036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91B183F92BF2AD1E00DFF036 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D00E61A65DCCE819D4B36222 /* Pods_CamIo_Hands_Cpp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CamIo_Hands_Cpp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +35,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F05B7F7E1B5FEA190FCD377 /* Pods_CamIo_Hands_Cpp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0BBB419121DEE2A0C4E25B83 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D00E61A65DCCE819D4B36222 /* Pods_CamIo_Hands_Cpp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		91B183DF2BF2AD1D00DFF036 = {
 			isa = PBXGroup;
 			children = (
 				91B183EA2BF2AD1D00DFF036 /* CamIo Hands Cpp */,
 				91B183E92BF2AD1D00DFF036 /* Products */,
+				D6D138B5DAA262A36381158B /* Pods */,
+				0BBB419121DEE2A0C4E25B83 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +82,16 @@
 			path = "CamIo Hands Cpp";
 			sourceTree = "<group>";
 		};
+		D6D138B5DAA262A36381158B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				637B2B49D9E2B2415AD1242B /* Pods-CamIo Hands Cpp.debug.xcconfig */,
+				12B409520F1D4586B8A1D4E7 /* Pods-CamIo Hands Cpp.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,6 +99,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91B183FC2BF2AD1E00DFF036 /* Build configuration list for PBXNativeTarget "CamIo Hands Cpp" */;
 			buildPhases = (
+				03774FCD02701944CFFCB749 /* [CP] Check Pods Manifest.lock */,
 				91B183E42BF2AD1D00DFF036 /* Sources */,
 				91B183E52BF2AD1D00DFF036 /* Frameworks */,
 				91B183E62BF2AD1D00DFF036 /* Resources */,
@@ -132,6 +158,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		03774FCD02701944CFFCB749 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CamIo Hands Cpp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		91B183E42BF2AD1D00DFF036 /* Sources */ = {
@@ -287,6 +338,7 @@
 		};
 		91B183FD2BF2AD1E00DFF036 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 637B2B49D9E2B2415AD1242B /* Pods-CamIo Hands Cpp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -315,6 +367,7 @@
 		};
 		91B183FE2BF2AD1E00DFF036 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 12B409520F1D4586B8A1D4E7 /* Pods-CamIo Hands Cpp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
