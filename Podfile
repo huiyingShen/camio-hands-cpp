@@ -6,6 +6,6 @@ target 'CamIo Hands Cpp' do
   use_frameworks!
 
   pod 'MediaPipeTasksVision', '0.10.11'
-  pod 'OpenCV' # Check the latest version on CocoaPods
+  #pod 'OpenCV', '4.3.0'
 end
 

@@ -7,6 +7,9 @@
 
 import UIKit
 
+import MediaPipeTasksVision
+
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
