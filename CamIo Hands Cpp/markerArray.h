@@ -42,71 +42,11 @@ struct MarkerBuf: SimpleRingBuf<std::vector<Point2f> >{
     bool isStale(int sec = 5*60){
         return (chrono::system_clock::now() - time_point).count() > sec;
     }
-    bool tryAdd(const vector<Point2f> &vp){
-        if (vp.size() !=4 ) return false;
-        add(vp);
-        return true;
-    }
-    static Point2f getCentroid(const vector<vector<Point2f> > &vDat){
-        Point2f p(0,0);
-        for (int i=0; i<vDat.size(); i++){
-            const vector<Point2f> &vp = vDat[i];
-            Point2f p1 = vp[0] +vp[1] + vp[2] + vp[3];;
-            p1 *= 0.25;
-            p += p1;
-        }
-        if (vDat.size() > 0)
-            p *= 1.0/vDat.size();
-        return p;
-    }
     
-    static int removeOutliner(vector<vector<Point2f> > &vDat, float tol = 2.0){
-        int cnt = vDat.size();
-        Point2f p0 = getCentroid(vDat);
-//        cout<<"removeOutliner(), p0: "<<p0<<endl;
-        for (int i=0; i<vDat.size(); ){
-            vector<Point2f> &vp = vDat[i];
-            Point2f p = vp[0] +vp[1] + vp[2] + vp[3];
-            p *= 0.25;
-//            cout<<"removeOutliner(), p: "<<p<<endl;
-            if (dist2(p,p0) > tol*tol)
-                vDat.erase(vDat.begin() + i);
-            else
-                i++;
-        }
-        return cnt - vDat.size();
-    }
-    
-    int findBestMarker(const vector<vector<Point2f> > &inliner){
-        Point2f p0 = getCentroid(inliner);
-        float d2Min = 9999.0;
-        int indx = -1;
-        for (int i=0; i<inliner.size(); i++){
-            const vector<Point2f> &vp = inliner[i];
-            Point2f p = vp[0] +vp[1] + vp[2] + vp[3];
-            p *= 0.25;
-            float d2 = dist2(p,p0);
-            if (d2 < d2Min){
-                d2Min = d2;
-                indx = i;
-            }
-        }
-        return indx;
-    }
-    
-    bool haveDetection(float tol, int minMarkers){
-        inliner = vDat;
-        while (removeOutliner(inliner,tol) > 0 ){
-            continue;
-        }
-        if (inliner.size() < minMarkers) return false;
-        int indx = findBestMarker(inliner);
-        if (indx == -1) return false;
-        bestMarker = inliner[indx];
-        time_point = chrono::system_clock::now();
-        cout<<"bestMarker = "<<bestMarker<<endl;
-        return true;
-    }
+    static Point2f getCentroid(const vector<vector<Point2f> > &vDat);
+    static int removeOutliner(vector<vector<Point2f> > &vDat, float tol = 2.0);
+    int findBestMarker(const vector<vector<Point2f> > &inliner) const;
+    bool haveDetection(float tol, int minMarkers);
     
 };
 
@@ -118,16 +58,7 @@ struct Marker3d{
         init(id_,length);
     }
     
-    void init(int id_, float length){
-        this->id_= id_;
-        this->length = length;
-        vP3f.resize(4);
-        float sz = length/2.0;
-        vP3f[0] = Point3f(-sz,sz,0);
-        vP3f[1] = Point3f(sz,sz,0);
-        vP3f[2] = Point3f(sz,-sz,0);
-        vP3f[3] = Point3f(-sz,-sz,0);
-    }
+    void init(int id_, float length);
     void translate(const Point3f &p){
         for (int i=0; i<4; i++)
             vP3f[i] += p;
@@ -147,96 +78,6 @@ struct Marker3d{
     friend ostream& operator<<(ostream& os, const Marker3d& m);
 };
 
-struct MarkerPair{
-    Marker3d marker3;
-    MarkerBuf marker2;
-    
-    void init(int id_, float length, int rotz, const Point3f &center){
-        marker3.init(id_,length);
-        for (int i=0; i<rotz; i++)
-            marker3.rotateZ90();
-        marker3.translate(center);
-    }
-};
-
-struct MarkerBase4{
-    MarkerPair marker00,marker01,marker11, marker10;
-    vector<MarkerPair *> vPair;
-    int id_;
-    vector<int> locOrder;
-
-    void init(int id_ = 249){
-        float w = 29.75*0.0254, h = 23.25*0.0254;
-        this->id_ = id_;
-        float sz0 = 3*0.0254;
-        float length = sz0*0.8;
-        marker00.init(id_,length,0,Point3f(-sz0*0.5,     sz0*0.5,    0));
-        marker01.init(id_,length,0,Point3f( sz0*0.5,    -sz0*0.5 + w,0));
-        marker11.init(id_,length,0,Point3f( sz0*0.5 + h,-sz0*0.5 + w,0));
-        marker10.init(id_,length,0,Point3f(-sz0*0.5 + h, sz0*0.5,    0));
-        vPair.clear();
-        vPair.push_back(&marker00);
-        vPair.push_back(&marker01);
-        vPair.push_back(&marker11);
-        vPair.push_back(&marker10);
-        
-        locOrder.push_back(00);
-        locOrder.push_back(01);
-        locOrder.push_back(11);
-        locOrder.push_back(10);
-    }
-
-    
-    bool isStale(int sec = 5*60){
-        for (int i=0; i<4; i++)
-            if (vPair[i]->marker2.isStale(sec))
-                return true;
-        return false;
-    }
-    
-    bool tryAddFrame(const vector< int > &ids, const vector< vector< Point2f > > &corners, int loc){
-        if (ids.size() != corners.size()) return false;
-        int indx = -1;
-        for (int i=0; i<ids.size(); i++)
-            if (ids[i] == id_){
-                indx = i;
-                break;
-            }
-        if (indx == -1) return false;
-        switch (loc) {
-            case 00:
-                marker00.marker2.tryAdd(corners[indx]);
-                break;
-            case 01:
-                marker01.marker2.tryAdd(corners[indx]);
-                break;
-            case 11:
-                marker11.marker2.tryAdd(corners[indx]);
-                break;
-            case 10:
-                marker10.marker2.tryAdd(corners[indx]);
-                break;
-            default:
-                return false;
-        }
-        return true;
-    }
-    
-    void test2(const vector< int > &ids, const vector< vector< Point2f > > &corners){
-        
-        
-    }
-    void test1(const vector< int > &ids, const vector< vector< Point2f > > &corners){
-        if (!tryAddFrame(ids,corners,00)) return;
-        float tol = 5;
-        int minMarkers = corners.size()/2;
-        bool b = marker00.marker2.haveDetection(tol,minMarkers);
-        if (b){
-            cout<<"MarkerBase4, test1(), detected!"<<endl;
-        }
-        
-    }
-};
 
 struct MarkerArray;  // forward declaration
 
@@ -259,16 +100,9 @@ struct SolvePnp{
 
     cv::Mat rvec, tvec;
     float errMean, errMax;
-    
-    void solve(const cv::Mat &camMatrix, const cv::Mat &distCoeffs){
-        cv::solvePnP(objectPoints, imagePoints, camMatrix, distCoeffs, rvec, tvec);  // iterative for accuracy
-
-        cv::projectPoints(objectPoints, rvec, tvec, camMatrix, distCoeffs, projectedPoints);
-        pair<float,float> err = ::getProjErr(imagePoints,projectedPoints);
-        errMean = err.first;
-        errMax = err.second;
-    }
+    void solve(const cv::Mat &camMatrix, const cv::Mat &distCoeffs);
 };
+
 struct Marker3dGroup: SolvePnp{
     vector<Marker3d> vMarker3d;
     vector<Point2f> projectedPoints;

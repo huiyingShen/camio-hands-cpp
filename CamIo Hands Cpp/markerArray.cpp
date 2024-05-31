@@ -23,6 +23,84 @@ namespace {
     bool _DEBUG = false;
 }
 
+Point2f MarkerBuf::getCentroid(const vector<vector<Point2f> > &vDat){
+    Point2f p(0,0);
+    for (int i=0; i<vDat.size(); i++){
+        const vector<Point2f> &vp = vDat[i];
+        Point2f p1 = vp[0] +vp[1] + vp[2] + vp[3];;
+        p1 *= 0.25;
+        p += p1;
+    }
+    if (vDat.size() > 0)
+        p *= 1.0/vDat.size();
+    return p;
+}
+int MarkerBuf::removeOutliner(vector<vector<Point2f> > &vDat, float tol){
+    int cnt = vDat.size();
+    Point2f p0 = getCentroid(vDat);
+//        cout<<"removeOutliner(), p0: "<<p0<<endl;
+    for (int i=0; i<vDat.size(); ){
+        vector<Point2f> &vp = vDat[i];
+        Point2f p = vp[0] +vp[1] + vp[2] + vp[3];
+        p *= 0.25;
+//            cout<<"removeOutliner(), p: "<<p<<endl;
+        if (dist2(p,p0) > tol*tol)
+            vDat.erase(vDat.begin() + i);
+        else
+            i++;
+    }
+    return cnt - vDat.size();
+}
+
+int MarkerBuf::findBestMarker(const vector<vector<Point2f> > &inliner) const {
+    Point2f p0 = getCentroid(inliner);
+    float d2Min = 9999.0;
+    int indx = -1;
+    for (int i=0; i<inliner.size(); i++){
+        const vector<Point2f> &vp = inliner[i];
+        Point2f p = vp[0] +vp[1] + vp[2] + vp[3];
+        p *= 0.25;
+        float d2 = dist2(p,p0);
+        if (d2 < d2Min){
+            d2Min = d2;
+            indx = i;
+        }
+    }
+    return indx;
+}
+bool MarkerBuf::haveDetection(float tol, int minMarkers){
+    inliner = vDat;
+    while (removeOutliner(inliner,tol) > 0 ){
+        continue;
+    }
+    if (inliner.size() < minMarkers) return false;
+    int indx = findBestMarker(inliner);
+    if (indx == -1) return false;
+    bestMarker = inliner[indx];
+    time_point = chrono::system_clock::now();
+    cout<<"bestMarker = "<<bestMarker<<endl;
+    return true;
+}
+
+void Marker3d::init(int id_, float length){
+    this->id_= id_;
+    this->length = length;
+    vP3f.resize(4);
+    float sz = length/2.0;
+    vP3f[0] = Point3f(-sz,sz,0);
+    vP3f[1] = Point3f(sz,sz,0);
+    vP3f[2] = Point3f(sz,-sz,0);
+    vP3f[3] = Point3f(-sz,-sz,0);
+}
+
+void SolvePnp::solve(const cv::Mat &camMatrix, const cv::Mat &distCoeffs){
+    cv::solvePnP(objectPoints, imagePoints, camMatrix, distCoeffs, rvec, tvec);  // iterative for accuracy
+
+    cv::projectPoints(objectPoints, rvec, tvec, camMatrix, distCoeffs, projectedPoints);
+    pair<float,float> err = ::getProjErr(imagePoints,projectedPoints);
+    errMean = err.first;
+    errMax = err.second;
+}
 
 void Marker3dGroup::fillterMarkers(const MarkerArray &markers, vector<Point2f> &imagePoints, vector<Point3f> &objectPoints){
     for (int i=0; i<vMarker3d.size(); i++){
@@ -166,17 +244,6 @@ void MarkerArray::drawXYZ(const Point3f &p3, int precision, const Point &xy, Mat
     s2 << "z = " << std::setprecision(precision) << p3.z;
     putText(bgr, s2.str(), cv::Point(xy.x+200, xy.y), fontFace, fontScale, color);
 }
-
-//void MarkerArray::drawAxis(Mat &bgr,const Mat &camMatrix, const Mat &distCoeffs, int idMin, int idMax){
-//    for (int i=0; i<ids.size(); i++){
-//        if (ids[i]<idMin || ids[i]>idMax) continue;
-//        std::stringstream s;
-//        s << ids[i];
-//        int x = corners[i][0].x, y = corners[i][0].y;
-//        cv::putText(bgr, s.str(), cv::Point(x, y), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255));
-//        aruco::drawAxis(bgr, camMatrix, distCoeffs, rvecs[i], tvecs[i], 0.05);
-//    }
-//}
 
 void MarkerArray::test0(){
     

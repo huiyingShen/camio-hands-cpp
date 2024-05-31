@@ -67,6 +67,38 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		91443C542C0957450047E750 /* swift */ = {
+			isa = PBXGroup;
+			children = (
+				91B183ED2BF2AD1D00DFF036 /* SceneDelegate.swift */,
+				91B183EF2BF2AD1D00DFF036 /* ViewController.swift */,
+				91B183EB2BF2AD1D00DFF036 /* AppDelegate.swift */,
+			);
+			name = swift;
+			sourceTree = "<group>";
+		};
+		91443C562C0957830047E750 /* inc */ = {
+			isa = PBXGroup;
+			children = (
+				91443C482C0948A00047E750 /* OpenCVWrapper.h */,
+				91443C4E2C094AE90047E750 /* camio.h */,
+				91443C512C094B1F0047E750 /* util.h */,
+				91443C4B2C094ACB0047E750 /* markerArray.h */,
+			);
+			name = inc;
+			sourceTree = "<group>";
+		};
+		91443C572C09581A0047E750 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				91443C4C2C094AD50047E750 /* markerArray.cpp */,
+				91443C4F2C094AF00047E750 /* camio.cpp */,
+				91443C522C094B270047E750 /* util.cpp */,
+				91443C492C0948A00047E750 /* OpenCVWrapper.mm */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 		91B183DF2BF2AD1D00DFF036 = {
 			isa = PBXGroup;
 			children = (
@@ -88,17 +120,9 @@
 		91B183EA2BF2AD1D00DFF036 /* CamIo Hands Cpp */ = {
 			isa = PBXGroup;
 			children = (
-				91B183EB2BF2AD1D00DFF036 /* AppDelegate.swift */,
-				91B183ED2BF2AD1D00DFF036 /* SceneDelegate.swift */,
-				91B183EF2BF2AD1D00DFF036 /* ViewController.swift */,
-				91443C482C0948A00047E750 /* OpenCVWrapper.h */,
-				91443C492C0948A00047E750 /* OpenCVWrapper.mm */,
-				91443C512C094B1F0047E750 /* util.h */,
-				91443C522C094B270047E750 /* util.cpp */,
-				91443C4B2C094ACB0047E750 /* markerArray.h */,
-				91443C4C2C094AD50047E750 /* markerArray.cpp */,
-				91443C4E2C094AE90047E750 /* camio.h */,
-				91443C4F2C094AF00047E750 /* camio.cpp */,
+				91443C572C09581A0047E750 /* src */,
+				91443C562C0957830047E750 /* inc */,
+				91443C542C0957450047E750 /* swift */,
 				91B183F12BF2AD1D00DFF036 /* Main.storyboard */,
 				91B183F42BF2AD1E00DFF036 /* Assets.xcassets */,
 				91B183F62BF2AD1E00DFF036 /* LaunchScreen.storyboard */,
